@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Dokan – Everyday things, wrapped like gifts</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;800&family=Hanken+Grotesk:wght@400;600&display=swap">
+<style>
+:root{--bg:#eef0ff;--ink:#1b1740;--muted:#5a5780;--accent:#ffb627;--on-accent:#1b1740;--teal:#1fa6a0;--line:#cfd2f3;--surface:#fff;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#15123a;--ink:#f1f0ff;--muted:#a9a6d6;--line:#2e2a66;--surface:#1d1950}}
+:root[data-theme="dark"]{--bg:#15123a;--ink:#f1f0ff;--muted:#a9a6d6;--line:#2e2a66;--surface:#1d1950}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Hanken Grotesk",system-ui,sans-serif;line-height:1.6}
+h1,h2,h3{font-family:"Bricolage Grotesque","Hanken Grotesk",system-ui,sans-serif;line-height:1.08;margin:0}
+a{color:inherit}button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--teal);outline-offset:3px}
+header{position:absolute;top:0;left:0;right:0;z-index:3;display:flex;justify-content:space-between;align-items:center;padding:20px clamp(20px,5vw,64px)}
+.logo{font:800 1.6rem "Bricolage Grotesque",sans-serif;text-decoration:none}
+nav{display:flex;align-items:center;gap:22px}nav a{text-decoration:none;font-weight:600}
+.cartbtn{background:var(--ink);color:var(--bg);border:0;border-radius:999px;padding:9px 18px;font-weight:600}
+.hero{position:relative;min-height:100vh;min-height:100svh;display:flex;align-items:center;overflow:hidden}
+#stage{position:absolute;inset:0;width:100%;height:100%;display:block}
+.copy{position:relative;z-index:2;padding:120px clamp(20px,5vw,64px) 60px;max-width:660px;pointer-events:none}
+.copy a{pointer-events:auto}
+h1{font-size:clamp(2.8rem,8vw,5.6rem);font-weight:800;letter-spacing:-.03em}
+.lead{font-size:1.15rem;color:var(--muted);max-width:44ch;margin:20px 0 28px}
+.btn{display:inline-block;background:var(--accent);color:var(--on-accent);font-weight:600;padding:14px 26px;border-radius:999px;text-decoration:none;border:0;transition:transform .2s}
+.btn:hover{transform:translateY(-2px)}
+.btn.alt{background:transparent;border:2px solid var(--ink);color:var(--ink);margin-left:10px}
+.btn.full{width:100%;text-align:center;margin-top:8px}
+.btn[disabled]{opacity:.5;cursor:not-allowed}
+section.wrap{padding:80px clamp(20px,5vw,64px);max-width:1180px;margin:0 auto}
+h2{font-size:clamp(2rem,5vw,3.2rem);letter-spacing:-.02em;margin-bottom:28px}
+.tools{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:28px}
+.chip{border:2px solid var(--line);background:transparent;border-radius:999px;padding:8px 18px;font-weight:600}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+input,select,textarea{font:inherit;background:var(--surface);color:var(--ink);border:2px solid var(--line);border-radius:14px;padding:10px 14px;width:100%}
+.tools input{max-width:240px;margin-left:auto;border-radius:999px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:22px;perspective:900px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:28px;padding:22px;display:flex;flex-direction:column;gap:8px;transition:transform .15s ease-out;transform-style:preserve-3d}
+.shape{height:150px;border-radius:20px;display:grid;place-items:center;background:var(--bg);margin-bottom:6px}
+.orb{width:92px;height:92px;border-radius:50%;box-shadow:inset -12px -14px 24px rgba(0,0,0,.28),inset 10px 10px 18px rgba(255,255,255,.45),0 20px 24px -14px rgba(0,0,0,.4);transform:translateZ(40px)}
+.card h3{font-size:1.25rem}.card p{margin:0;color:var(--muted);font-size:.95rem}
+.row{display:flex;justify-content:space-between;align-items:center;margin-top:auto;padding-top:10px}
+.price{font-weight:600;font-size:1.1rem}
+.add{background:var(--accent);color:var(--on-accent);border:0;border-radius:999px;padding:9px 18px;font-weight:600}
+.empty{color:var(--muted);grid-column:1/-1}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:30px;counter-reset:s}
+.step{border-top:3px solid var(--teal);padding-top:14px;counter-increment:s}
+.step h3::before{content:counter(s) ". "}.step p{color:var(--muted);margin:8px 0 0}
+details{border-bottom:1px solid var(--line);padding:16px 0}summary{font-weight:600;cursor:pointer}details p{color:var(--muted);margin:8px 0 0}
+footer{padding:26px clamp(20px,5vw,64px);color:var(--muted);border-top:1px solid var(--line);display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.veil{position:fixed;inset:0;background:rgba(10,8,30,.55);opacity:0;pointer-events:none;transition:opacity .25s;z-index:20}
+.veil.on{opacity:1;pointer-events:auto}
+aside{position:fixed;top:0;right:0;bottom:0;width:min(420px,100%);background:var(--bg);z-index:21;transform:translateX(100%);transition:transform .3s;display:flex;flex-direction:column;padding:calc(18px + env(safe-area-inset-top,0px)) 20px calc(18px + env(safe-area-inset-bottom,0px))}
+aside.on{transform:none}
+.dh{display:flex;justify-content:space-between;align-items:center}.dh h2{font-size:1.8rem;margin:0}
+.x{background:none;border:0;font-size:1.8rem;line-height:1}
+.lines{flex:1;overflow-y:auto;margin:14px 0}
+.line{display:flex;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}
+.dot{width:38px;height:38px;border-radius:50%;flex:none}
+.line .n{flex:1;font-weight:600}.line small{display:block;color:var(--muted);font-weight:400}
+.qty{display:flex;align-items:center;gap:8px}.qty button{width:28px;height:28px;border-radius:50%;border:2px solid var(--line);background:none}
+.sum{display:flex;justify-content:space-between;color:var(--muted)}.sum.t{color:var(--ink);font-weight:600;font-size:1.1rem}
+form{display:grid;gap:8px;margin-top:10px}
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translate(-50%,40px);background:var(--ink);color:var(--bg);padding:10px 20px;border-radius:999px;opacity:0;transition:.3s;z-index:30}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+@media (max-width:700px){nav a{display:none}.hero{align-items:flex-start}.copy{padding-top:100px}.tools input{max-width:none;margin:0;flex:1 1 100%}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<header>
+  <a class="logo" href="#top" id="brand">Dokan</a>
+  <nav><a href="#shop">Shop</a><a href="#delivery">Delivery</a><a href="#faq">Help</a><button class="cartbtn" id="openCart" aria-label="Open cart">Cart (<span id="cnt">0</span>)</button></nav>
+</header>
+<main id="top">
+<div class="hero">
+  <canvas id="stage" aria-hidden="true"></canvas>
+  <div class="copy">
+    <h1>Parcels worth opening.</h1>
+    <p class="lead">Everyday things, chosen with care and wrapped like gifts. Order today, open it at your door in two days.</p>
+    <a class="btn" href="#shop">Shop now</a><a class="btn alt" href="#delivery">How delivery works</a>
+  </div>
+</div>
+
+<section class="wrap" id="shop">
+  <h2>The shop</h2>
+  <div class="tools" id="chips"></div>
+  <div class="grid" id="grid" aria-live="polite"></div>
+</section>
+
+<section class="wrap" id="delivery">
+  <h2>From shelf to doorstep</h2>
+  <div class="steps">
+    <div class="step"><h3>Pick</h3><p>Add what you like to the cart. No account needed.</p></div>
+    <div class="step"><h3>Confirm</h3><p>Enter your address and send the order on WhatsApp.</p></div>
+    <div class="step"><h3>Open</h3><p>We pack it the same day and deliver within two days.</p></div>
+  </div>
+</section>
+
+<section class="wrap" id="faq">
+  <h2>Good to know</h2>
+  <details><summary>How do I pay?</summary><p>Pay cash on delivery or by mobile banking. We confirm the details on WhatsApp.</p></details>
+  <details><summary>How much is delivery?</summary><p id="feeTxt"></p></details>
+  <details><summary>Can I return an item?</summary><p>Yes. Message us within three days of delivery and we will arrange a pickup.</p></details>
+</section>
+</main>
+<footer><span>© 2026 Dokan</span><span>Open daily, 9am to 9pm</span></footer>
+
+<div class="veil" id="veil"></div>
+<aside id="drawer" aria-label="Shopping cart" aria-hidden="true">
+  <div class="dh"><h2>Your cart</h2><button class="x" id="closeCart" aria-label="Close cart">×</button></div>
+  <div class="lines" id="lines"></div>
+  <div class="sum"><span>Subtotal</span><span id="sub"></span></div>
+  <div class="sum"><span>Delivery</span><span id="del"></span></div>
+  <div class="sum t"><span>Total</span><span id="tot"></span></div>
+  <form id="co">
+    <input name="name" placeholder="Full name" required autocomplete="name">
+    <input name="phone" placeholder="Phone number" required inputmode="tel" autocomplete="tel">
+    <textarea name="addr" rows="2" placeholder="Full delivery address" required></textarea>
+    <select name="pay" aria-label="Payment method"><option>Cash on delivery</option><option>bKash</option><option>Nagad</option></select>
+    <button class="btn full" id="place" type="submit">Send order on WhatsApp</button>
+  </form>
+</aside>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+/* ===== EDIT THESE ===== */
+var CONFIG={name:"Dokan",whatsapp:"8801700000000",cur:"৳",delivery:80,freeOver:3000};
+var PRODUCTS=[
+ {id:1,name:"Brass desk lamp",cat:"Home",price:2450,color:"#ffb627",desc:"Warm light, weighted base, dimmable."},
+ {id:2,name:"Linen tote",cat:"Bags",price:890,color:"#1fa6a0",desc:"Holds a laptop and groceries."},
+ {id:3,name:"Ceramic mug set",cat:"Kitchen",price:1600,color:"#7b61ff",desc:"Four hand-glazed mugs in a gift box."},
+ {id:4,name:"Cast iron pan",cat:"Kitchen",price:2900,color:"#3b3b52",desc:"Pre-seasoned, works on any stove."},
+ {id:5,name:"Canvas backpack",cat:"Bags",price:2200,color:"#e4572e",desc:"Water-resistant with a padded sleeve."},
+ {id:6,name:"Scented candle",cat:"Gifts",price:650,color:"#f28ab2",desc:"Soy wax, sixty hours of burn time."},
+ {id:7,name:"Woven basket",cat:"Home",price:1100,color:"#c9a26b",desc:"Hand-woven storage for blankets or toys."},
+ {id:8,name:"Gift hamper",cat:"Gifts",price:3400,color:"#2d9cdb",desc:"Candle, mug and tote in one wrapped box."}
+];
+/* ====================== */
+var $=function(i){return document.getElementById(i)};
+var cart={},cat="All",q="";
+try{cart=JSON.parse(localStorage.getItem("dokan-cart")||"{}")||{};}catch(e){cart={};}
+function save(){try{localStorage.setItem("dokan-cart",JSON.stringify(cart));}catch(e){}}
+function money(n){return CONFIG.cur+" "+n.toLocaleString("en-US");}
+function find(id){return PRODUCTS.filter(function(p){return p.id==id})[0];}
+document.title=CONFIG.name+" – Everyday things, wrapped like gifts";
+$("brand").textContent=CONFIG.name;
+$("feeTxt").textContent=money(CONFIG.delivery)+" per order. Free when you spend over "+money(CONFIG.freeOver)+".";
+
+function chips(){
+  var cats=["All"].concat(PRODUCTS.map(function(p){return p.cat}).filter(function(c,i,a){return a.indexOf(c)==i}));
+  var h=cats.map(function(c){return '<button class="chip" aria-pressed="'+(c==cat)+'" data-c="'+c+'">'+c+'</button>'}).join("");
+  $("chips").innerHTML=h+'<input id="q" type="search" placeholder="Search products" aria-label="Search products" value="'+q+'">';
+  $("q").addEventListener("input",function(e){q=e.target.value.toLowerCase();grid();});
+}
+$("chips").addEventListener("click",function(e){var c=e.target.getAttribute("data-c");if(c){cat=c;var s=q;chips();grid();}});
+function grid(){
+  var list=PRODUCTS.filter(function(p){return (cat=="All"||p.cat==cat)&&(p.name+p.desc).toLowerCase().indexOf(q)>-1});
+  $("grid").innerHTML=list.length?list.map(function(p){
+    return '<article class="card"><div class="shape"><div class="orb" style="background:'+p.color+'"></div></div><h3>'+p.name+'</h3><p>'+p.desc+'</p><div class="row"><span class="price">'+money(p.price)+'</span><button class="add" data-id="'+p.id+'">Add to cart</button></div></article>';
+  }).join(""):'<p class="empty">No products match your search.</p>';
+}
+$("grid").addEventListener("click",function(e){var id=e.target.getAttribute("data-id");if(id){cart[id]=(cart[id]||0)+1;save();draw();toast(find(id).name+" added to cart");}});
+$("grid").addEventListener("pointermove",function(e){
+  var c=e.target.closest(".card");if(!c||e.pointerType=="touch")return;
+  var r=c.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;
+  c.style.transform="rotateY("+x*12+"deg) rotateX("+-y*12+"deg)";
+});
+$("grid").addEventListener("pointerout",function(e){var c=e.target.closest(".card");if(c)c.style.transform="";});
+
+function totals(){
+  var s=0,n=0;for(var id in cart){var p=find(id);if(p){s+=p.price*cart[id];n+=cart[id];}}
+  var d=(s==0||s>=CONFIG.freeOver)?0:CONFIG.delivery;return{sub:s,del:d,tot:s+d,n:n};
+}
+function draw(){
+  var t=totals(),h="";
+  for(var id in cart){var p=find(id);if(!p)continue;
+    h+='<div class="line"><span class="dot" style="background:'+p.color+'"></span><span class="n">'+p.name+'<small>'+money(p.price)+'</small></span><span class="qty"><button data-m="'+id+'" aria-label="Remove one">−</button>'+cart[id]+'<button data-p="'+id+'" aria-label="Add one">+</button></span></div>';}
+  $("lines").innerHTML=h||'<p class="empty">Your cart is empty. Pick something from the shop.</p>';
+  $("cnt").textContent=t.n;$("sub").textContent=money(t.sub);
+  $("del").textContent=t.del?money(t.del):(t.sub?"Free":"–");$("tot").textContent=money(t.tot);
+  $("place").disabled=t.n==0;
+}
+$("lines").addEventListener("click",function(e){
+  var m=e.target.getAttribute("data-m"),p=e.target.getAttribute("data-p");
+  if(p)cart[p]++;if(m){cart[m]--;if(cart[m]<1)delete cart[m];}
+  save();draw();
+});
+function toggleCart(on){$("drawer").classList.toggle("on",on);$("veil").classList.toggle("on",on);$("drawer").setAttribute("aria-hidden",!on);}
+$("openCart").onclick=function(){toggleCart(true)};$("closeCart").onclick=$("veil").onclick=function(){toggleCart(false)};
+document.addEventListener("keydown",function(e){if(e.key=="Escape")toggleCart(false);});
+var tt;function toast(m){var t=$("toast");t.textContent=m;t.classList.add("on");clearTimeout(tt);tt=setTimeout(function(){t.classList.remove("on")},1800);}
+
+$("co").addEventListener("submit",function(e){
+  e.preventDefault();var f=e.target,t=totals();if(!t.n)return;
+  var L=["New order from "+CONFIG.name,""];
+  for(var id in cart){var p=find(id);if(p)L.push(cart[id]+" x "+p.name+" = "+money(p.price*cart[id]));}
+  L.push("","Subtotal: "+money(t.sub),"Delivery: "+money(t.del),"Total: "+money(t.tot),"","Name: "+f.name.value,"Phone: "+f.phone.value,"Address: "+f.addr.value,"Payment: "+f.pay.value);
+  window.open("https://wa.me/"+CONFIG.whatsapp+"?text="+encodeURIComponent(L.join("\n")),"_blank");
+  cart={};save();draw();f.reset();toggleCart(false);toast("Order ready to send on WhatsApp");
+});
+chips();grid();draw();
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function(){
+  if(!window.THREE)return;
+  var canvas=document.getElementById("stage"),reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var R=new THREE.WebGLRenderer({canvas:canvas,antialias:true,alpha:true});
+  R.setPixelRatio(Math.min(devicePixelRatio||1,2));
+  var S=new THREE.Scene(),C=new THREE.PerspectiveCamera(40,1,.1,100);C.position.z=9;
+  S.add(new THREE.AmbientLight(0xffffff,.7));
+  var k=new THREE.DirectionalLight(0xffffff,.9);k.position.set(4,6,6);S.add(k);
+  var rim=new THREE.PointLight(0x1fa6a0,1.2,30);rim.position.set(-5,-2,4);S.add(rim);
+  var P=new THREE.Group(),bm=new THREE.MeshStandardMaterial({color:0xffb627,roughness:.35,metalness:.1}),rm=new THREE.MeshStandardMaterial({color:0x1fa6a0,roughness:.3});
+  P.add(new THREE.Mesh(new THREE.BoxGeometry(2.2,2.2,2.2),bm));
+  P.add(new THREE.Mesh(new THREE.BoxGeometry(2.26,2.26,.36),rm));
+  P.add(new THREE.Mesh(new THREE.BoxGeometry(.36,2.26,2.26),rm));
+  [-1,1].forEach(function(s){var l=new THREE.Mesh(new THREE.TorusGeometry(.42,.12,12,32),rm);l.position.set(s*.42,1.3,0);l.rotation.z=s*.9;P.add(l);});
+  S.add(P);
+  var cols=[0x7b61ff,0xffb627,0x1fa6a0,0xffffff],geos=[new THREE.IcosahedronGeometry(.28,0),new THREE.OctahedronGeometry(.3),new THREE.TorusGeometry(.22,.09,10,24),new THREE.SphereGeometry(.2,20,20)],bits=[];
+  for(var i=0;i<14;i++){var m=new THREE.Mesh(geos[i%4],new THREE.MeshStandardMaterial({color:cols[i%4],roughness:.4}));
+    m.userData={a:i/14*6.283,r:3.4+(i%3)*.5,y:(Math.random()-.5)*4,sp:.1+Math.random()*.15};S.add(m);bits.push(m);}
+  var mx=0,my=0,sy=0,wide=true;
+  addEventListener("pointermove",function(e){mx=e.clientX/innerWidth-.5;my=e.clientY/innerHeight-.5;});
+  addEventListener("scroll",function(){sy=scrollY/innerHeight;},{passive:true});
+  function size(){var w=canvas.clientWidth,h=canvas.clientHeight;R.setSize(w,h,false);C.aspect=w/h;wide=w>800;
+    P.position.set(wide?2.6:0,wide?0:-2.2,0);P.scale.setScalar(wide?1:.8);C.updateProjectionMatrix();}
+  addEventListener("resize",size);size();
+  var t=0;(function f(){
+    if(!reduce)t+=.01;
+    P.rotation.y=t*.8+mx*1.2+sy*1.5;P.rotation.x=.35+my*.6;
+    bits.forEach(function(b){var d=b.userData,a=d.a+t*d.sp*3;
+      b.position.set(P.position.x+Math.cos(a)*d.r,P.position.y+d.y+Math.sin(t*2+d.a)*.2,Math.sin(a)*d.r*.6);
+      b.rotation.x+=.01;b.rotation.y+=.012;});
+    R.render(S,C);requestAnimationFrame(f);
+  })();
+})();
+</script>
+</body>
+</html>
